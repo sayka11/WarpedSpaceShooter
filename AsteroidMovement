@@ -1,0 +1,29 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class AsteroidMovement : MonoBehaviour
+{
+    private Rigidbody2D _rb;
+    public float Speed=5f;
+    private Vector3 movement;
+    void Start()
+    {
+
+        movement=transform.position;
+        movement.x=-40;
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.gameObject.tag=="DeleteAsteroid"){
+            Destroy(this.gameObject);
+        }
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+       transform.position=Vector3.MoveTowards(transform.position,movement,Time.fixedUnscaledDeltaTime*Speed);
+    }
+}
