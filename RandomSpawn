@@ -1,0 +1,48 @@
+using UnityEngine;
+
+public class RandomSpawn : MonoBehaviour
+{
+    public GameObject asteroid;
+    public GameObject asteroid_mini;
+    public Transform[] RandomPoint = new Transform[2];
+    private float spawnRate = 1f;
+    private float nextSpawn = 0f;
+    private float _Random;
+    private Vector3 PointSpawn;
+    private int RandomAsteroid = 0;
+    private float[] RandomY = new float[2];
+
+    void Start()
+    {
+        // Исправлено: используем правильные индексы массива
+        RandomY[0] = RandomPoint[0].position.y;
+        RandomY[1] = RandomPoint[1].position.y;
+    }
+
+    void Update()
+    {
+        if (Time.time > nextSpawn)
+        {
+            nextSpawn = Time.time + spawnRate;
+
+            // Исправлено: выбираем случайное значение между RandomY[0] и RandomY[1]
+            _Random = Random.Range(RandomY[0], RandomY[1]);
+
+            // Точка спавна с фиксированным индексом
+            PointSpawn = new Vector3(RandomPoint[0].position.x, _Random, RandomPoint[0].position.z);
+
+            // Случайный выбор астероида
+            RandomAsteroid = Random.Range(0, 2);
+
+            switch (RandomAsteroid)
+            {
+                case 0:
+                    Instantiate(asteroid, PointSpawn, Quaternion.identity);
+                    break;
+                case 1:
+                    Instantiate(asteroid_mini, PointSpawn, Quaternion.identity);
+                    break;
+            }
+        }
+    }
+}
