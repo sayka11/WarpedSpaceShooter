@@ -1,0 +1,27 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+
+public class ShowPause : MonoBehaviour
+{
+    void Start()
+    {
+        PauseMenu.SetActive(false);
+        Time.timeScale=1;
+    }
+   public GameObject PauseMenu;
+   public void ShowPauseMenu(){
+    PauseMenu.SetActive(true);
+    Time.timeScale=0;
+   }
+   public void HidePauseMenu(){
+    PauseMenu.SetActive(false);
+    Time.timeScale=1;
+   }
+   public void GoToMainMenu(){
+    PauseMenu.SetActive(false);
+    SceneManager.LoadScene("MainMenu");
+    Time.timeScale=1;
+   }
+}
