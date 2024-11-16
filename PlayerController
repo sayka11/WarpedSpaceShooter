@@ -1,0 +1,18 @@
+using UnityEngine;
+
+public class PlayerController : MonoBehaviour
+{
+    public float speed = 5f; // Скорость перемещения
+
+    void Update()
+    {
+        // Получаем ввод от пользователя
+        float verticalInput = Input.GetAxis("Vertical");
+
+        // Вычисляем новое положение игрока
+        Vector3 movement = new Vector3(0, verticalInput * speed * Time.deltaTime, 0);
+
+        // Перемещаем игрока
+        transform.Translate(movement);
+    }
+}
