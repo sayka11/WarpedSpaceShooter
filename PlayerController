@@ -5,10 +5,15 @@ public class PlayerController : MonoBehaviour
     public GameObject bulletPrefab; // Префаб пули
     public Transform bulletSpawnPoint; // Точка, откуда вылетают пули
     public float bulletSpeed = 10f; // Скорость пули
+    public float moveSpeed = 5f; // Скорость движения
 
     void Update()
     {
-        // Проверяем нажатие на пробел
+        // Управление движением вверх и вниз
+        float verticalInput = Input.GetAxis("Vertical");
+        transform.Translate(Vector3.up * verticalInput * moveSpeed * Time.deltaTime);
+
+        // Проверяем нажатие на пробел для стрельбы
         if (Input.GetKeyDown(KeyCode.Space))
         {
             Shoot();
