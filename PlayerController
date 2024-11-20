@@ -2,17 +2,26 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public float speed = 5f; // Скорость перемещения
+    public GameObject bulletPrefab; // Префаб пули
+    public Transform bulletSpawnPoint; // Точка, откуда вылетают пули
+    public float bulletSpeed = 10f; // Скорость пули
 
     void Update()
     {
-        // Получаем ввод от пользователя
-        float verticalInput = Input.GetAxis("Vertical");
+        // Проверяем нажатие на пробел
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Shoot();
+        }
+    }
 
-        // Вычисляем новое положение игрока
-        Vector3 movement = new Vector3(0, verticalInput * speed * Time.deltaTime, 0);
-
-        // Перемещаем игрока
-        transform.Translate(movement);
+    void Shoot()
+    {
+        // Создаем пулю
+        GameObject bullet = Instantiate(bulletPrefab, bulletSpawnPoint.position, Quaternion.identity);
+        
+        // Задаем скорость пули
+        Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
+        rb.velocity = new Vector2(bulletSpeed, 0);
     }
 }
