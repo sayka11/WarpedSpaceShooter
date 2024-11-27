@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI; // Для работы с UI
 
 public class PlayerController : MonoBehaviour
 {
@@ -6,6 +7,17 @@ public class PlayerController : MonoBehaviour
     public Transform bulletSpawnPoint; // Точка, откуда вылетают пули
     public float bulletSpeed = 10f; // Скорость пули
     public float moveSpeed = 5f; // Скорость движения
+
+    public Text lifesText; // Ссылка на текстовое поле для отображения жизней
+    private int lifes = 3; // Количество жизней
+    public GameObject PauseMenu;
+
+
+    void Start()
+    {
+        // Инициализируем текст с жизнями
+        UpdateLifesText();
+    }
 
     void Update()
     {
@@ -28,5 +40,38 @@ public class PlayerController : MonoBehaviour
         // Задаем скорость пули
         Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
         rb.velocity = new Vector2(bulletSpeed, 0);
+    }
+
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        // Проверяем, если объект имеет тег "Asteroid" или "asteroid_mini"
+        if (collision.CompareTag("Asteroid") || collision.CompareTag("asteroid_mini"))
+        {
+            // Уменьшаем количество жизней
+            lifes--;
+
+            // Обновляем текст жизней
+            UpdateLifesText();
+
+            // Если жизни закончились, останавливаем игру
+            if (lifes <= 0)
+            {
+                GameOver();
+            }
+        }
+    }
+
+    void UpdateLifesText()
+    {
+        // Обновляем текст UI
+        lifesText.text = "Lifes: " + lifes;
+    }
+
+    void GameOver()
+    {
+        // Останавливаем игру
+        Debug.Log("Game Over!");
+        PauseMenu.SetActive(true);
+        Time.timeScale = 0; // Останавливает все действия в игре
     }
 }
