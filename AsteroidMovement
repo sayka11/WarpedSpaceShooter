@@ -7,6 +7,8 @@ public class AsteroidMovement : MonoBehaviour
     private Rigidbody2D _rb;
     public float Speed=5f;
     private Vector3 movement;
+    public Animator animator;
+    public float destroyDelay = 0.5f;
     void Start()
     {
 
@@ -17,7 +19,9 @@ public class AsteroidMovement : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if(collision.gameObject.tag=="DeleteAsteroid"){
-            Destroy(this.gameObject);
+            animator.SetTrigger("Hit");
+            Destroy(collision.gameObject);
+            Destroy(gameObject, destroyDelay);
         }
     }
 
