@@ -1,5 +1,5 @@
 using UnityEngine;
-using UnityEngine.UI; // Для работы с UI
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -11,7 +11,7 @@ public class PlayerController : MonoBehaviour
     public Text lifesText; // Ссылка на текстовое поле для отображения жизней
     private int lifes = 3; // Количество жизней
     public GameObject PauseMenu;
-
+    public Animator animator;
 
     void Start()
     {
@@ -49,6 +49,7 @@ public class PlayerController : MonoBehaviour
         {
             // Уменьшаем количество жизней
             lifes--;
+            animator.SetTrigger("Hit");
 
             // Обновляем текст жизней
             UpdateLifesText();
@@ -72,6 +73,6 @@ public class PlayerController : MonoBehaviour
         // Останавливаем игру
         Debug.Log("Game Over!");
         PauseMenu.SetActive(true);
-        Time.timeScale = 0; // Останавливает все действия в игре
+        Time.timeScale = 0;
     }
 }
