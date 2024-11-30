@@ -1,5 +1,5 @@
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.UI; // Для работы с UI
 
 public class PlayerController : MonoBehaviour
 {
@@ -11,7 +11,7 @@ public class PlayerController : MonoBehaviour
     public Text lifesText; // Ссылка на текстовое поле для отображения жизней
     private int lifes = 3; // Количество жизней
     public GameObject PauseMenu;
-    public Animator animator;
+
 
     void Start()
     {
@@ -22,8 +22,11 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         // Управление движением вверх и вниз
-        float verticalInput = Input.GetAxis("Vertical");
-        transform.Translate(Vector3.up * verticalInput * moveSpeed * Time.deltaTime);
+        float verticalInput = Input.GetAxis("Vertical");   // Вверх/вниз
+float horizontalInput = Input.GetAxis("Horizontal"); // Влево/вправо
+
+Vector3 movement = new Vector3(horizontalInput, verticalInput, 0) * moveSpeed * Time.deltaTime;
+transform.Translate(movement);
 
         // Проверяем нажатие на пробел для стрельбы
         if (Input.GetKeyDown(KeyCode.Space))
@@ -49,7 +52,6 @@ public class PlayerController : MonoBehaviour
         {
             // Уменьшаем количество жизней
             lifes--;
-            animator.SetTrigger("Hit");
 
             // Обновляем текст жизней
             UpdateLifesText();
@@ -73,6 +75,6 @@ public class PlayerController : MonoBehaviour
         // Останавливаем игру
         Debug.Log("Game Over!");
         PauseMenu.SetActive(true);
-        Time.timeScale = 0;
+        Time.timeScale = 0; // Останавливает все действия в игре
     }
 }
