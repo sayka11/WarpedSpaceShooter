@@ -5,29 +5,50 @@ using UnityEngine;
 public class AsteroidMovement : MonoBehaviour
 {
     private Rigidbody2D _rb;
-    public float Speed=5f;
+    public float Speed = 5f;
     private Vector3 movement;
     public Animator animator;
-    public float destroyDelay = 0.5f;
+    public float destroyDelay = 0.5f; // Задержка перед уничтожением астероида после завершения анимации
+
     void Start()
     {
-
-        movement=transform.position;
-        movement.x=-40;
+        animator.ResetTrigger("Hit"); // Сбросить триггер на старте
+        movement = transform.position;
+        movement.x = -40; // Цель движения астероида
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.gameObject.tag=="DeleteAsteroid"){
-            animator.SetTrigger("Hit");
-            Destroy(collision.gameObject);
-            Destroy(gameObject, destroyDelay);
+        // Проверяем, если астероид сталкивается с пулей
+        if (collision.gameObject.CompareTag("Shoot"))
+        {
+            animator.SetTrigger("Hit"); // Запускаем анимацию разрушения
+            animator.SetBool("HitAsteroid", true); // Устанавливаем переменную HitAsteroid в true
+            Destroy(collision.gameObject); // Уничтожаем пулю
+            Destroy(gameObject, destroyDelay); // Уничтожаем астероид с задержкой
+            StartCoroutine(ResetHitAsteroid()); // Запускаем корутину для сброса переменной через секунду
+        }
+
+        // Удаляем астероид, если он попадает в зону с тегом "DeleteAsteroid"
+        if (collision.gameObject.CompareTag("DeleteAsteroid"))
+        {
+            Destroy(gameObject); // Уничтожение астероида без анимации
         }
     }
 
-    // Update is called once per frame
+    // Корутин для сброса переменной HitAsteroid
+    private IEnumerator ResetHitAsteroid()
+    {
+        // Ждем 1 секунду
+        yield return new WaitForSeconds(1f);
+        // Сбрасываем значение переменной
+        animator.SetBool("HitAsteroid", false);
+    }
+
+    // Update вызывается каждый кадр
     void Update()
     {
-       transform.position=Vector3.MoveTowards(transform.position,movement,Time.fixedUnscaledDeltaTime*Speed);
+        // Движение астероида в заданное направление
+        transform.position = Vector3.MoveTowards(transform.position, movement, Time.fixedUnscaledDeltaTime * Speed);
     }
 }
