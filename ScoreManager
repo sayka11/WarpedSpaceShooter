@@ -4,11 +4,43 @@ using UnityEngine.UI;
 public class ScoreManager : MonoBehaviour
 {
     public Text scoreText; // Текст с очками
-    private int score = 0;
+    public Text bestScoreText; // Текст для лучшего счета
+
+    private int score = 0; // Текущий счет
+    private int bestScore = 0; // Лучший счет
+
+    void Start()
+    {
+        // Загружаем лучший счет из PlayerPrefs (по умолчанию 0)
+        bestScore = PlayerPrefs.GetInt("BestScore", 0);
+        UpdateBestScoreText();
+    }
 
     public void AddScore(int amount)
     {
+        // Увеличиваем текущий счет
         score += amount;
         scoreText.text = "Score: " + score;
+
+        // Проверяем и обновляем лучший счет
+        if (score > bestScore)
+        {
+            bestScore = score;
+            PlayerPrefs.SetInt("BestScore", bestScore);
+            UpdateBestScoreText();
+        }
+    }
+
+    private void UpdateBestScoreText()
+    {
+        bestScoreText.text = "Best Score: " + bestScore;
+    }
+
+    public void ResetBestScore()
+    {
+        // Сбрасываем лучший счет
+        bestScore = 0;
+        PlayerPrefs.SetInt("BestScore", bestScore);
+        UpdateBestScoreText();
     }
 }
