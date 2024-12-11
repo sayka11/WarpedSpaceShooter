@@ -1,9 +1,11 @@
+using System.Collections;
 using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
     public int scorePerHit = 10; // Очки за попадание
     private ScoreManager scoreManager;
+    private Animator animator;
 
     void Start()
     {
@@ -18,9 +20,25 @@ public class Bullet : MonoBehaviour
             // Увеличиваем очки
             scoreManager.AddScore(scorePerHit);
 
-            // Уничтожаем астероид и пулю
-            Destroy(collision.gameObject);
+            // Запуск анимации попадания на астероиде
+            Animator asteroidAnimator = collision.gameObject.GetComponent<Animator>();
+            if (asteroidAnimator != null)
+            {
+                asteroidAnimator.SetTrigger("Hit"); // Запускаем анимацию
+            }
+
+            // Начинаем корутину для удаления астероида после задержки
+            StartCoroutine(DestroyAsteroidWithDelay(collision.gameObject, 1f)); // Уничтожение через 1 секунду
+
+            // Уничтожаем пулю немедленно
             Destroy(gameObject);
         }
+    }
+
+    // Корутин для задержки перед уничтожением астероида
+    private IEnumerator DestroyAsteroidWithDelay(GameObject asteroid, float delay)
+    {
+        yield return new WaitForSeconds(delay); // Ждем указанное время
+        Destroy(asteroid); // Уничтожаем астероид
     }
 }
