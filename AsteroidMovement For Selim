@@ -1,0 +1,49 @@
+using System.Collections;
+using UnityEngine;
+
+public class AsteroidMovement : MonoBehaviour
+{
+    private Rigidbody2D _rb;
+    public float Speed = 5f;
+    private Vector3 movement;
+    public Animator animator;
+    public float destroyDelay = 0.5f; // Задержка перед уничтожением астероида после анимации
+
+    void Start()
+    {
+        animator.ResetTrigger("Hit"); // Сброс триггера на старте
+
+        // Рандомизируем конечную точку, чтобы астероиды не скапливались
+        float randomOffset = Random.Range(-5f, 5f); // Случайное смещение по Y
+        movement = new Vector3(transform.position.x + 40, transform.position.y + randomOffset, transform.position.z);
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Shoot"))
+        {
+            animator.SetTrigger("Hit");
+            animator.SetBool("HitAsteroid", true);
+            Destroy(collision.gameObject); // Уничтожаем пулю
+            Destroy(gameObject, destroyDelay); // Уничтожаем астероид с задержкой
+            StartCoroutine(ResetHitAsteroid());
+        }
+
+        if (collision.gameObject.CompareTag("DeleteAsteroid"))
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    private IEnumerator ResetHitAsteroid()
+    {
+        yield return new WaitForSeconds(1f);
+        animator.SetBool("HitAsteroid", false);
+    }
+
+    void Update()
+    {
+        // Движение астероида в случайную точку (чтобы не скапливались)
+        transform.position = Vector3.MoveTowards(transform.position, movement, Time.deltaTime * Speed);
+    }
+}
