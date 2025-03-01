@@ -1,0 +1,28 @@
+using UnityEngine;
+
+public class EnemyMovement : MonoBehaviour
+{
+    public float speed = 3f; // Скорость движения
+
+    private void Update()
+    {
+        transform.position += Vector3.left * speed * Time.deltaTime; // Двигаем объект влево
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Player"))
+        {
+            GameObject respawnPoint = GameObject.Find("Respawn"); // Ищем точку возрождения
+            if (respawnPoint != null)
+            {
+                collision.transform.position = respawnPoint.transform.position; // Перемещаем игрока в точку возрождения
+            }
+        }
+
+        if (collision.CompareTag("DeleteEnemy"))
+        {
+            Destroy(gameObject); // Удаляем врага при столкновении с "DeleteEnemy"
+        }
+    }
+}
