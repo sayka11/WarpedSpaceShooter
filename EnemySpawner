@@ -1,0 +1,22 @@
+using UnityEngine;
+using System.Collections;
+
+public class EnemySpawner : MonoBehaviour
+{
+    public GameObject enemyPrefab; // Префаб врага
+    public float spawnInterval = 2f; // Интервал спавна в секундах
+
+    private void Start()
+    {
+        StartCoroutine(SpawnEnemies()); // Запускаем процесс спавна
+    }
+
+    private IEnumerator SpawnEnemies()
+    {
+        while (true)
+        {
+            Instantiate(enemyPrefab, transform.position, Quaternion.identity); // Создаём врага в точке Pos1
+            yield return new WaitForSeconds(spawnInterval); // Ждём перед следующим спавном
+        }
+    }
+}
