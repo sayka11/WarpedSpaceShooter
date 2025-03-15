@@ -15,7 +15,7 @@ public class AsteroidMovement : MonoBehaviour
 
         // Рандомизируем конечную точку, чтобы астероиды не скапливались
         float randomOffset = Random.Range(-5f, 5f); // Случайное смещение по Y
-        movement = new Vector3(transform.position.x + 40, transform.position.y + randomOffset, transform.position.z);
+        movement = new Vector3(transform.position.x - 40, transform.position.y + randomOffset, transform.position.z);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
